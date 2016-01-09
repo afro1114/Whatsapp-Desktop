@@ -8,6 +8,7 @@
     var fileSystem = require('fs');
     var NativeImage = require('native-image');
     var BrowserWindow = require('browser-window');
+    var ipcMain = require('ipc');
 
     global.onlyOSX = function(callback) {
         if (process.platform === 'darwin') {
@@ -131,13 +132,11 @@
             "min-width": 600,
             "min-height": 600,
             "type": "toolbar",
-            "node-integration": false,
+            "node-integration": true,
             "title": "WhatsApp"
           });
 
-          whatsApp.window.loadUrl('https://web.whatsapp.com', {
-            userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.52 Safari/537.36'
-          });
+          whatsApp.window.loadUrl("file://" + __dirname + "/html/main.html");
 
           if(config.get("useProxy")) {
             var session = whatsApp.window.webContents.session;
@@ -150,30 +149,33 @@
 
           whatsApp.window.show();
 
-            whatsApp.window.on('page-title-updated', onlyOSX(function(event, title) {
-                var count = title.match(/\((\d+)\)/);
-                    count = count ? count[1] : '';
+          // bounce for osx
+          ipcMain.on('newmsg', function(event, value) {
+            app.dock.bounce('informational');
+          })
 
-                app.dock.setBadge(count);
+          // update badge
+          ipcMain.on('uptbadge', function(event, value) {
+            var count = value.title.match(/\((\d+)\)/);
+            count = count ? count[1] : '';
+
+            onlyOSX(function() {
+              app.dock.setBadge(count);
+            })()
+
+            onlyWin(function() {
                 if (parseInt(count) > 0) {
-                    app.dock.bounce('informational');
-                }
-            }));
+                    if (!whatsApp.window.isFocused()) {
+                        whatsApp.window.flashFrame(true);
+                    }
 
-            whatsApp.window.on('page-title-updated', onlyWin(function(event, title) {
-                var count = title.match(/\((\d+)\)/);
-                    count = count ? count[1] : '';
-
-                if (parseInt(count) > 0) {
-                  if(!whatsApp.window.isFocused()){
-                    whatsApp.window.flashFrame(true);
-                  }
-                  var badge = NativeImage.createFromPath(app.getAppPath() + "/assets/badges/badge-" + (count > 9 ? 0 : count) +".png");
-                  whatsApp.window.setOverlayIcon(badge, "new messages");
+                    var badge = NativeImage.createFromPath(app.getAppPath() + "/assets/badges/badge-" + (count > 9 ? 0 : count) + ".png");
+                    whatsApp.window.setOverlayIcon(badge, "new messages");
                 } else {
-                  whatsApp.window.setOverlayIcon(null, "no new messages");
+                    whatsApp.window.setOverlayIcon(null, "no new messages");
                 }
-            }));
+            })()
+          })
 
             whatsApp.window.webContents.on("new-window", function(e, url){
                 require('shell').openExternal(url);
