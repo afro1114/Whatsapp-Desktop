@@ -26,6 +26,7 @@ var SettingsView = {
   init: function () {
     $("#avatars").attr("checked", config.get("hideAvatars"));
     $("#previews").attr("checked", config.get("hidePreviews"));
+    $("#ninja").attr("checked", config.get("ninjaMode"));
     if (config.get("thumbSize")) {
       $("#thumb-size").val(config.get("thumbSize"));
     }
@@ -41,6 +42,7 @@ var SettingsView = {
   saveSettings: function () {
     config.set("hideAvatars", $("#avatars").is(":checked"));
     config.set("hidePreviews", $("#previews").is(":checked"));
+    config.set("ninjaMode", $("#ninja").is(":checked"));
     config.set("thumbSize", parseInt($("#thumb-size").val(), 10));
     if($("#useProxy").is(":checked")) {
       config.set("useProxy", $("#useProxy").is(":checked"));

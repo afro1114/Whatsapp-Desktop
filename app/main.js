@@ -44,22 +44,26 @@
       },
       applyConfiguration: function () {
         whatsApp.window.webContents.on('dom-ready', function (event, two) {
-          var noAvatar = '.chat-avatar{display: none}';
-          var noPreview = '.chat-secondary .chat-status{z-index: -999;}';
-
-          var thumbSize = '.image-thumb { width: '+ config.currentSettings.thumbSize + 'px  !important;' +
-          'height: '+ config.currentSettings.thumbSize + 'px !important;}' +
-          '.image-thumb img.image-thumb-body { width: auto !important;' +
-          'height: '+ config.currentSettings.thumbSize + 'px !important;}';
 
           if(config.currentSettings.hideAvatars) {
-            this.insertCSS(noAvatar);
+            this.insertCSS('.chat-avatar{display: none}');
           }
+          
           if(config.currentSettings.hidePreviews){
-            this.insertCSS(noPreview);
+            this.insertCSS('.chat-secondary .chat-status{z-index: -999;}');
+          }
+
+          if(config.currentSettings.ninjaMode) {
+            this.insertCSS('.message-out .message-text{color: #dcf8c6}');
+            this.insertCSS('.message-in .message-text{color: #ffffff}');
+            this.insertCSS('.message-text:hover{color: #262626}');
           }
 
           if(config.currentSettings.thumbSize) {
+            var thumbSize = '.image-thumb { width: '+ config.currentSettings.thumbSize + 'px  !important;' +
+            'height: '+ config.currentSettings.thumbSize + 'px !important;}' +
+            '.image-thumb img.image-thumb-body { width: auto !important;' +
+            'height: '+ config.currentSettings.thumbSize + 'px !important;}';
             this.insertCSS(thumbSize);
           }
         });
