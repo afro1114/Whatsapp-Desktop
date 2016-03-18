@@ -14,7 +14,7 @@
     "build:osx": "npm run clean:osx && electron-packager ./app \"WhatsApp\" --out=dist/osx --platform=darwin --arch=x64 --version=0.34.1 --icon=assets/osx/WhatsApp.icns"
   },
   "devDependencies": {
-    "electron-packager": "^5.1.0",
-    "electron-prebuilt": "^0.34.1"
+    "electron-packager": "^5.2.1",
+    "electron-prebuilt": "^0.37.2"
   }
 }

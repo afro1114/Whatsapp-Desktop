@@ -3,7 +3,7 @@
 
     module.exports = [
         {
-            label: 'WhatsApp Desktop',
+            label: ((process.platform === 'win32' || process.platform === 'win64') ? 'File': 'WhatsApp Desktop'),
             submenu: [
                 {
                     label: 'About WhatsApp',
@@ -104,6 +104,13 @@
                 {
                   label: 'Settings',
                   accelerator: 'CmdOrCtrl+,',
+                  click: function () {
+                    global.settings.init();
+                  }
+                },
+                {
+                  label: 'Temp',
+                  accelerator: 'CmdOrCtrl+.',
                   click: function () {
                     global.settings.init();
                   }

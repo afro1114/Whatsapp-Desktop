@@ -14,7 +14,7 @@ var SettingsView = {
     });
 
     $("#close-button").on("click", function () {
-      settings.window.close();
+      document.querySelector(".settings-container").style.display = "none";
     });
 
     $("#useProxy").on("change", function () {

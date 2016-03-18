@@ -5,19 +5,24 @@
 	<meta charset="utf-8">
 	<title>WhatsApp</title>
 	<style>
-		html,
-		body,
-		webview {
+		html, body, #whatsapp-view {
 			margin: 0;
 			padding: 0;
 			height: 100%;
-			display: block
+			width: 100%;
+		}
+		#settings-view {
+			width: 500px;
+			height: 500px;
+			margin: auto;
 		}
 	</style>
+	<script>
+	</script>
 </head>
 
 <body>
-	<webview id="wv" src="https://web.whatsapp.com"></webview>
+	<webview id="whatsapp-view" src="https://web.whatsapp.com" nodeintegration></webview>
 	<script src="../js/views/main.js"></script>
 </body>
 

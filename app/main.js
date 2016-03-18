@@ -1,14 +1,14 @@
 (function(scope) {
     "use strict";
 
-    var app = require('app');
+    var app = require('electron').app;
     var AppMenu = require('menu');
     var MenuItem = require('menu-item');
     var AppTray = require('tray');
     var fileSystem = require('fs');
     var NativeImage = require('native-image');
     var BrowserWindow = require('browser-window');
-    var ipcMain = require('ipc');
+    var ipcMain = require('electron').ipcMain;
 
     global.onlyOSX = function(callback) {
         if (process.platform === 'darwin') {
@@ -35,7 +35,7 @@
         config.loadConfiguration();
       },
       loadConfiguration: function () {
-        var settingsFile = app.getDataPath() +"/settings.json";
+        var settingsFile = app.getPath('userData') +"/settings.json";
         try {
           var data = fileSystem.readFileSync(settingsFile);
           config.currentSettings = JSON.parse(data);
@@ -45,28 +45,6 @@
       },
       applyConfiguration: function () {
         whatsApp.window.webContents.on('dom-ready', function (event, two) {
-
-          if(config.currentSettings.hideAvatars) {
-            this.insertCSS('.chat-avatar{display: none}');
-          }
-          
-          if(config.currentSettings.hidePreviews){
-            this.insertCSS('.chat-secondary .chat-status{z-index: -999;}');
-          }
-
-          if(config.currentSettings.ninjaMode) {
-            this.insertCSS('.message-out .message-text{color: #dcf8c6}');
-            this.insertCSS('.message-in .message-text{color: #ffffff}');
-            this.insertCSS('.message-text:hover{color: #262626}');
-          }
-
-          if(config.currentSettings.thumbSize) {
-            var thumbSize = '.image-thumb { width: '+ config.currentSettings.thumbSize + 'px  !important;' +
-            'height: '+ config.currentSettings.thumbSize + 'px !important;}' +
-            '.image-thumb img.image-thumb-body { width: auto !important;' +
-            'height: '+ config.currentSettings.thumbSize + 'px !important;}';
-            this.insertCSS(thumbSize);
-          }
         });
 
         if(config.get("useProxy")) {
@@ -79,7 +57,7 @@
         }
       },
       saveConfiguration: function () {
-        fileSystem.writeFileSync(app.getDataPath() + "/settings.json", JSON.stringify(config.currentSettings) , 'utf-8');
+        fileSystem.writeFileSync(app.getPath('userData') + "/settings.json", JSON.stringify(config.currentSettings) , 'utf-8');
       },
       get: function (key) {
         return config.currentSettings[key];
@@ -97,7 +75,10 @@
     global.whatsApp = {
         init: function() {
             whatsApp.createMenu();
-            whatsApp.createTray();
+
+            onlyOSX(function () {
+              whatsApp.createTray();
+            });
 
             whatsApp.clearCache();
             config.init();
@@ -129,14 +110,16 @@
             "x": config.get("posX"),
             "width": config.get("width"),
             "height": config.get("height"),
-            "min-width": 600,
+            "min-width": 670,
             "min-height": 600,
             "type": "toolbar",
             "node-integration": true,
-            "title": "WhatsApp"
+            "title": "WhatsApp",
+            "plugins": true,
+            "webaudio": true
           });
 
-          whatsApp.window.loadUrl("file://" + __dirname + "/html/main.html");
+          whatsApp.window.loadURL("file://" + __dirname + "/html/main.html");
 
           if(config.get("useProxy")) {
             var session = whatsApp.window.webContents.session;
@@ -151,8 +134,10 @@
 
           // bounce for osx
           ipcMain.on('newmsg', function(event, value) {
-            app.dock.bounce('informational');
-          })
+            onlyOSX(function() {
+              app.dock.bounce('informational');
+            });
+          });
 
           // update badge
           ipcMain.on('uptbadge', function(event, value) {
@@ -161,7 +146,7 @@
 
             onlyOSX(function() {
               app.dock.setBadge(count);
-            })()
+            })();
 
             onlyWin(function() {
                 if (parseInt(count) > 0) {
@@ -174,14 +159,8 @@
                 } else {
                     whatsApp.window.setOverlayIcon(null, "no new messages");
                 }
-            })()
-          })
-
-            whatsApp.window.webContents.on("new-window", function(e, url){
-                require('shell').openExternal(url);
-                e.preventDefault();
-            });
-
+            })();
+          });
 
             whatsApp.window.on('close', onlyOSX(function(e) {
                 if (whatsApp.window.forceClose !== true) {
@@ -267,7 +246,7 @@
           }
         );
 
-        settings.window.loadUrl("file://" + __dirname + "/html/settings.html");
+        settings.window.loadURL("file://" + __dirname + "/html/settings.html");
         settings.window.show();
 
         settings.window.on("close", function () {
