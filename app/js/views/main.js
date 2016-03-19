@@ -73,11 +73,78 @@ onload = function() {
 			events.some(function(event) {
 				if(document.getElementById('main') != null ) {
 					document.getElementById('main').addEventListener('keyup', function(event) {
-						var target = event.target;
-						if(target.classList.contains("input")) {
-							target.innerHTML = target.innerHTML.replace(/( )?:\\\) /g, "&#x1f604 ");
-							// 🙂
-							console.log(target.innerHTML);
+						if(event.getModifierState("Control") && event.code === "Space") {
+							function placeCaretAtEnd(el) {
+								el.focus();
+								if (typeof window.getSelection != "undefined"
+								&& typeof document.createRange != "undefined") {
+									var range = document.createRange();
+									range.selectNodeContents(el);
+									range.collapse(false);
+									var sel = window.getSelection();
+									sel.removeAllRanges();
+									sel.addRange(range);
+								} else if (typeof document.body.createTextRange != "undefined") {
+									var textRange = document.body.createTextRange();
+									textRange.moveToElementText(el);
+									textRange.collapse(false);
+									textRange.select();
+								}
+							}
+							var target = event.target;
+
+							if(target.classList.contains("input")) {
+								// :)
+								target.innerHTML = target.innerHTML.replace(/:\\\)/g, "<img alt='&#x1F642' draggable='false' class='emoji emojiordered1425' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// :o
+								target.innerHTML = target.innerHTML.replace(/:o/gi, "<img alt='&#x1F62E' draggable='false' class='emoji emojiordered1405' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// :(
+								target.innerHTML = target.innerHTML.replace(/:\\\(/gi, "<img alt='&#x2639' draggable='false' class='emoji emojiordered0077' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// :|
+								target.innerHTML = target.innerHTML.replace(/:\\|/gi, "<img alt='&#x1F610' draggable='false' class='emoji emojiordered1375' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>" );
+
+								// (Y)
+								target.innerHTML = target.innerHTML.replace(/\\\(Y\\\)/gi, "<img alt='&#x1F44D' draggable='false' class='emoji emojiordered0885' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// :*
+								target.innerHTML = target.innerHTML.replace(/:\\*/gi, "<img alt='&#x1F618' draggable='false' class='emoji emojiordered1383' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// :/
+								target.innerHTML = target.innerHTML.replace(/:\\//g, "<img alt='&#x1F615' draggable='false' class='emoji emojiordered1380' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// XD
+								target.innerHTML = target.innerHTML.replace(/xd/gi, "<img alt='&#x1F606' draggable='false' class='emoji emojiordered1365' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// (:
+								target.innerHTML = target.innerHTML.replace(/\\\(:/g, "<img alt='&#x1F643' draggable='false' class='emoji emojiordered1426' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								//	u.u
+								target.innerHTML = target.innerHTML.replace(/u\\.u/gi, "<img alt='&#x1F614' draggable='false' class='emoji emojiordered1379' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								//:'(
+								target.innerHTML = target.innerHTML.replace(/:'\\\(/gi, "<img alt='&#x1F622' draggable='false' class='emoji emojiordered1393' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								//T.T
+								target.innerHTML = target.innerHTML.replace(/t\\.t/gi, "<img alt='&#x1F62D' draggable='false' class='emoji emojiordered1404' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// :$
+								target.innerHTML = target.innerHTML.replace(/:$/gi, "<img alt='&#x1F633' draggable='false' class='emoji emojiordered1410' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// :smirk:
+								target.innerHTML = target.innerHTML.replace(/:smirk:/gi, "<img alt='&#x1F60F' draggable='false' class='emoji emojiordered1374' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								//:P
+								target.innerHTML = target.innerHTML.replace(/:p/gi, "<img alt='&#x1F61C' draggable='false' class='emoji emojiordered1387' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								// .i.
+								target.innerHTML = target.innerHTML.replace(/\\.i\\./gi, "<img alt='&#x1F595' draggable='false' class='emoji emojiordered1323' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+
+								placeCaretAtEnd(target);
+								console.log(target.innerHTML);
+							}
 						}
 					});
 
