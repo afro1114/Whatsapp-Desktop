@@ -111,7 +111,7 @@
             "width": config.get("width"),
             "height": config.get("height"),
             "min-width": 670,
-            "min-height": 600,
+            "min-height": 650,
             "type": "toolbar",
             "node-integration": true,
             "title": "WhatsApp",
@@ -162,6 +162,16 @@
             })();
           });
 
+					ipcMain.on("settings.show", function (event, value) {
+						var jsString;
+						if(value) {
+							jsString = 'document.getElementById("settings-container").style.display = "block";';
+						} else {
+							jsString = 'document.getElementById("settings-container").style.display = "none";';
+						}
+							whatsApp.window.webContents.executeJavaScript(jsString);
+					});
+
             whatsApp.window.on('close', onlyOSX(function(e) {
                 if (whatsApp.window.forceClose !== true) {
                     e.preventDefault();
@@ -170,10 +180,6 @@
             }));
 
             whatsApp.window.on("close", function () {
-              if(settings.window) {
-                settings.window.close();
-                settings.window = null;
-              }
               //save the window position
               config.set("posX", this.getBounds().x);
               config.set("posY", this.getBounds().y);
@@ -193,68 +199,12 @@
             app.on('window-all-closed', onlyWin(function() {
                 app.quit();
             }));
-        }
+        },
+				showSettings: function () {
+					var jsString = 'document.getElementById("settings-container").style.display = "block";';
+					whatsApp.window.webContents.executeJavaScript(jsString);
+				}
     };
-
-    global.settings = {
-      init: function() {
-        // if there is already one instance of the window created show that one
-        if(settings.window){
-          settings.window.show();
-        } else {
-          settings.openWindow();
-          settings.createMenu();
-        }
-      },
-      createMenu: function () {
-        settings.menu = new AppMenu();
-        settings.menu.append(new MenuItem(
-          {
-            label: "close",
-            visible: false,
-            accelerator: "esc",
-            click: function () {settings.window.close();}
-          })
-        );
-        settings.menu.append(new MenuItem(
-          {
-            label: 'Toggle DevTools',
-            accelerator: 'Alt+CmdOrCtrl+O',
-            visible: false,
-            click: function() {  settings.window.toggleDevTools(); }
-          })
-        );
-        settings.menu.append(new MenuItem(
-          {
-            label: 'Reload settings view',
-            accelerator: 'CmdOrCtrl+r',
-            visible: false,
-            click: function() { settings.window.reload();}
-          })
-        );
-        settings.window.setMenu(settings.menu);
-        settings.window.setMenuBarVisibility(false);
-      },
-      openWindow: function() {
-        settings.window = new BrowserWindow(
-          {
-            "width": 500,
-            "height": 500,
-            "resizable": false,
-            "center": true,
-            "frame": false
-          }
-        );
-
-        settings.window.loadURL("file://" + __dirname + "/html/settings.html");
-        settings.window.show();
-
-        settings.window.on("close", function () {
-          settings.window = null;
-        });
-      }
-};
-
     app.on('ready', function() {
         whatsApp.init();
     });

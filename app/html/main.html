@@ -4,25 +4,14 @@
 <head>
 	<meta charset="utf-8">
 	<title>WhatsApp</title>
-	<style>
-		html, body, #whatsapp-view {
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			width: 100%;
-		}
-		#settings-view {
-			width: 500px;
-			height: 500px;
-			margin: auto;
-		}
-	</style>
-	<script>
-	</script>
+	<link rel="stylesheet" href="../css/main.css">
 </head>
 
 <body>
 	<webview id="whatsapp-view" src="https://web.whatsapp.com" nodeintegration></webview>
+	<div id="settings-container">
+		<webview id="settings-view" src="settings.html" nodeintegration allowtransparency="on"></webview>
+	</div>
 	<script src="../js/views/main.js"></script>
 </body>
 

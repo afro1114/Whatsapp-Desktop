@@ -105,14 +105,7 @@
                   label: 'Settings',
                   accelerator: 'CmdOrCtrl+,',
                   click: function () {
-                    global.settings.init();
-                  }
-                },
-                {
-                  label: 'Temp',
-                  accelerator: 'CmdOrCtrl+.',
-                  click: function () {
-                    global.settings.init();
+                    global.whatsApp.showSettings();
                   }
                 }
             ]

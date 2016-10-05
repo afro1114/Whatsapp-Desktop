@@ -6,7 +6,6 @@ var config = require('remote').getGlobal('config');
 onload = function() {
 	var webview = document.getElementById("whatsapp-view");
 	webview.addEventListener("dom-ready", function() {
-		webview.openDevTools();
 
 		// Code below sets up a MutationObserver to check for notifications on chats.
 		//
@@ -71,8 +70,8 @@ onload = function() {
 
 		var introText = new MutationObserver(function (events) {
 			events.some(function(event) {
-				if(document.getElementById('main') != null ) {
-					document.getElementById('main').addEventListener('keyup', function(event) {
+				if(document.getElementById('app') != null ) {
+					document.getElementById('app').addEventListener('keyup', function(event) {
 						if(event.getModifierState("Control") && event.code === "Space") {
 							function placeCaretAtEnd(el) {
 								el.focus();
@@ -189,7 +188,6 @@ onload = function() {
 	});
 
 	webview.addEventListener('console-message', function(msg) {
-		console.log(webview.isAudioMuted());
 		if(msg.message == 'newmsg') {
 			ipcRenderer.send('newmsg', true);
 		}

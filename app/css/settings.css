@@ -13,11 +13,6 @@ header h4 {
   margin-top: 2px;
 }
 
-main {
-  margin: 10px auto;
-  padding: 20px;
-}
-
 #save-button{
   bottom: 0;
   right: 0;
@@ -25,4 +20,17 @@ main {
 
 label:after {
   width: 200px
+}
+
+.settings-panel {
+	width: 90%;
+	height: 500px;
+	padding: 20px;
+	background: #fff;
+	margin: auto;
+}
+.main-container {
+	padding-top: 50px;
+	width: 100%;
+	height: 100%;
 }

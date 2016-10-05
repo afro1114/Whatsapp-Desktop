@@ -1,6 +1,7 @@
 var whatsApp = require('remote').getGlobal("whatsApp");
 var settings = require('remote').getGlobal('settings');
 var config = require('remote').getGlobal('config');
+var ipcRenderer = require('electron').ipcRenderer;
 var SettingsView = {
   bindEvents: function () {
     $this = this;
@@ -10,11 +11,11 @@ var SettingsView = {
         return;
       }
       $this.saveSettings();
-      settings.window.close();
+			ipcRenderer.send("settings.show", false);
     });
 
     $("#close-button").on("click", function () {
-      document.querySelector(".settings-container").style.display = "none";
+			ipcRenderer.send("settings.show", false);
     });
 
     $("#useProxy").on("change", function () {
