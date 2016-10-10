@@ -20,15 +20,15 @@
 			</header>
 			<div id="settings-wrapper">
 				<p>
-					<input type="checkbox" id="avatars" />
+					<input type="checkbox" class="filled-in" id="avatars" />
 					<label for="avatars">Hide Avatars</label>
 				</p>
 				<p>
-					<input type="checkbox" id="previews" />
+					<input type="checkbox" class="filled-in" id="previews" />
 					<label for="previews">Hide Message Previews</label>
 				</p>
 				<p>
-					<input type="checkbox" id="ninja" />
+					<input type="checkbox" class="filled-in" id="ninja" />
 					<label for="ninja">Ninja Mode</label>
 				</p>
 				<div class="row">
@@ -39,18 +39,22 @@
 				</div>
 
 				<p>
-					<input type="checkbox" id="useProxy" />
+					<input type="checkbox" class="filled-in" id="useProxy" />
 					<label for="useProxy">Use Proxy (Changes in proxy settings require app restart)</label>
 				</p>
 
 				<div class="row">
-					<div class="input-field col s6">
+					<div class="input-field col s4">
 						<input id="httpProxy" type="text" class="validate">
 						<label id="httpProxy_label" for="httpProxy" data-error="This field is required if you are using a proxy">Http Proxy</label>
 					</div>
-					<div class="input-field col s6">
+					<div class="input-field col s4">
 						<input id="httpsProxy" type="text" placeholder="Leave blank to use the same" class="validate">
 						<label id="httpsProxy_label" for="httpsProxy" >Https Proxy</label>
+					</div>
+					<div class="input-field col s4">
+						<input id="socksProxy" type="text" class="validate">
+						<label id="socksProxy_label" for="socksProxy" >Socks Proxy</label>
 					</div>
 				</div>
 

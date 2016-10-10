@@ -1,7 +1,7 @@
 (function() {
    "use strict";
    
-	const {Menu, BrowserWindow, Tray} = require('electron');
+   const {Menu, BrowserWindow, Tray} = require('electron');
    var app = require('electron').app;
    var fileSystem = require('fs');
    var NativeImage = require('electron').nativeImage;
@@ -53,9 +53,14 @@
             var session = whatsApp.window.webContents.session;
             var httpProxy = config.get("httpProxy");
             var httpsProxy = config.get("httpsProxy") || httpProxy;
-            if(httpProxy) {
-               session.setProxy("http="+ httpProxy +";https=" + httpsProxy, () => {});
+            var socksProxy = config.get("socksProxy");
+            
+            var proxyConfig = httpProxy ? ("http=" + httpProxy + ";https=" + httpsProxy) : null;
+            if (socksProxy) {
+               proxyConfig = proxyConfig ? proxyConfig+";socks=" + socksProxy : "socks=" + socksProxy ;
             }
+            console.log(proxyConfig);
+            if(proxyConfig) session.setProxy(proxyConfig, () => {});
          }
       },
       saveConfiguration () {
@@ -85,6 +90,7 @@
          whatsApp.clearCache();
          config.init();
          whatsApp.openWindow();
+         whatsApp.webContents.openDevTools();
          config.applyConfiguration();
       },
       createMenu() {
@@ -117,7 +123,7 @@
             "title": "WhatsApp",
             "plugins": true,
             "webaudio": true,
-				"icon": __dirname + 'assets/icon/icon.png'
+            "icon": __dirname + 'assets/icon/icon.png'
          });
          
          whatsApp.window.loadURL("file://" + __dirname + "/html/main.html");
@@ -150,7 +156,7 @@
             })();
             
             onlyLinux((() => {
-                //Update on linux
+               //Update on linux
             }));
             
             onlyWin(() => {

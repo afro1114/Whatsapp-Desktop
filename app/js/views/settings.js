@@ -20,11 +20,11 @@ var SettingsView = {
 		$("#useProxy").on("change", () => {
 			$("#httpProxy").prop("disabled", !($("#useProxy").is(":checked")));
 			$("#httpsProxy").prop("disabled", !($("#useProxy").is(":checked")));
+			$("#socksProxy").prop("disabled", !($("#useProxy").is(":checked")));
 		});
 	},
 	
 	init() {
-		console.log("Settings Init");
 		$("#avatars").attr("checked", config.get("hideAvatars"));
 		$("#previews").attr("checked", config.get("hidePreviews"));
 		$("#ninja").attr("checked", config.get("ninjaMode"));
@@ -34,8 +34,10 @@ var SettingsView = {
 		$("#useProxy").attr("checked", config.get("useProxy"));
 		$("#httpProxy").val(config.get("httpProxy"));
 		$("#httpsProxy").val(config.get("httpsProxy"));
+		$("#socksProxy").val(config.get("socksProxy"));
 		$("#httpProxy").prop("disabled", !($("#useProxy").is(":checked")));
 		$("#httpsProxy").prop("disabled", !($("#useProxy").is(":checked")));
+		$("#socksProxy").prop("disabled", !($("#useProxy").is(":checked")));
 		this.bindEvents();
 	},
 	
@@ -48,10 +50,12 @@ var SettingsView = {
 			config.set("useProxy", $("#useProxy").is(":checked"));
 			config.set("httpProxy", $("#httpProxy").val());
 			config.set("httpsProxy", $("#httpsProxy").val());
+			config.set("socksProxy", $("#socksProxy").val());
 		} else {
 			config.unSet("useProxy");
 			config.unSet("httpProxy");
 			config.unSet("httpsProxy");
+			config.unSet("socksProxy");
 		}
 		config.saveConfiguration();
 		config.applyConfiguration();

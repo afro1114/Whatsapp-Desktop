@@ -8,7 +8,7 @@ onload = function() {
 		
 		if(config.get('hideAvatars')) {
 			this.insertCSS('#side .chat-title {margin-left: 10px}');
-			this.insertCSS('.chat-avatar{display: none}');
+			this.insertCSS('.chat-avatar{display: none !important}');
 		}
 
 		if(config.get('hidePreviews')){
