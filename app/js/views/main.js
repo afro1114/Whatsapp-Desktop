@@ -1,11 +1,10 @@
-//jshint esversion: 6
-
-var ipcRenderer = require('electron').ipcRenderer;
-var config = require('remote').getGlobal('config');
+const {ipcRenderer} = require('electron');
+var config = require('electron').remote.getGlobal('config');
 
 onload = function() {
 	var webview = document.getElementById("whatsapp-view");
 	webview.addEventListener("dom-ready", function() {
+		webview.openDevTools();
 
 		// Code below sets up a MutationObserver to check for notifications on chats.
 		//
@@ -94,52 +93,52 @@ onload = function() {
 
 							if(target.classList.contains("input")) {
 								// :)
-								target.innerHTML = target.innerHTML.replace(/:\\\)/g, "<img alt='&#x1F642' draggable='false' class='emoji emojiordered1425' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:\\\)/g, "<img alt='&#x1F642' draggable='false' class='emoji emojiordered1522' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// :o
-								target.innerHTML = target.innerHTML.replace(/:o/gi, "<img alt='&#x1F62E' draggable='false' class='emoji emojiordered1405' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:o/gi, "<img alt='&#x1F62E' draggable='false' class='emoji emojiordered1502' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// :(
 								target.innerHTML = target.innerHTML.replace(/:\\\(/gi, "<img alt='&#x2639' draggable='false' class='emoji emojiordered0077' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// :|
-								target.innerHTML = target.innerHTML.replace(/:\\|/gi, "<img alt='&#x1F610' draggable='false' class='emoji emojiordered1375' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>" );
+								target.innerHTML = target.innerHTML.replace(/:\\|/gi, "<img alt='&#x1F610' draggable='false' class='emoji emojiordered1472' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>" );
 
 								// (Y)
-								target.innerHTML = target.innerHTML.replace(/\\\(Y\\\)/gi, "<img alt='&#x1F44D' draggable='false' class='emoji emojiordered0885' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/\\\(Y\\\)/gi, "<img alt='&#x1F44D' draggable='false' class='emoji emojiordered0912' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// :*
-								target.innerHTML = target.innerHTML.replace(/:\\*/gi, "<img alt='&#x1F618' draggable='false' class='emoji emojiordered1383' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:\\*/gi, "<img alt='&#x1F618' draggable='false' class='emoji emojiordered1480' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// :/
-								target.innerHTML = target.innerHTML.replace(/:\\//g, "<img alt='&#x1F615' draggable='false' class='emoji emojiordered1380' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:\\//g, "<img alt='&#x1F615' draggable='false' class='emoji emojiordered1477' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// XD
-								target.innerHTML = target.innerHTML.replace(/xd/gi, "<img alt='&#x1F606' draggable='false' class='emoji emojiordered1365' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/xd/gi, "<img alt='&#x1F606' draggable='false' class='emoji emojiordered1462' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// (:
-								target.innerHTML = target.innerHTML.replace(/\\\(:/g, "<img alt='&#x1F643' draggable='false' class='emoji emojiordered1426' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/\\\(:/g, "<img alt='&#x1F643' draggable='false' class='emoji emojiordered1523' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								//	u.u
-								target.innerHTML = target.innerHTML.replace(/u\\.u/gi, "<img alt='&#x1F614' draggable='false' class='emoji emojiordered1379' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/u\\.u/gi, "<img alt='&#x1F614' draggable='false' class='emoji emojiordered1476' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								//:'(
-								target.innerHTML = target.innerHTML.replace(/:'\\\(/gi, "<img alt='&#x1F622' draggable='false' class='emoji emojiordered1393' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:'\\\(/gi, "<img alt='&#x1F622' draggable='false' class='emoji emojiordered1490' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								//T.T
-								target.innerHTML = target.innerHTML.replace(/t\\.t/gi, "<img alt='&#x1F62D' draggable='false' class='emoji emojiordered1404' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/t\\.t/gi, "<img alt='&#x1F62D' draggable='false' class='emoji emojiordered1501' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// :$
-								target.innerHTML = target.innerHTML.replace(/:$/gi, "<img alt='&#x1F633' draggable='false' class='emoji emojiordered1410' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:$/gi, "<img alt='&#x1F633' draggable='false' class='emoji emojiordered1507' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// :smirk:
-								target.innerHTML = target.innerHTML.replace(/:smirk:/gi, "<img alt='&#x1F60F' draggable='false' class='emoji emojiordered1374' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:smirk:/gi, "<img alt='&#x1F60F' draggable='false' class='emoji emojiordered1471' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								//:P
-								target.innerHTML = target.innerHTML.replace(/:p/gi, "<img alt='&#x1F61C' draggable='false' class='emoji emojiordered1387' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/:p/gi, "<img alt='&#x1F61C' draggable='false' class='emoji emojiordered1484' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								// .i.
-								target.innerHTML = target.innerHTML.replace(/\\.i\\./gi, "<img alt='&#x1F595' draggable='false' class='emoji emojiordered1323' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
+								target.innerHTML = target.innerHTML.replace(/\\.i\\./gi, "<img alt='&#x1F595' draggable='false' class='emoji emojiordered1419' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>");
 
 								placeCaretAtEnd(target);
 								console.log(target.innerHTML);
@@ -188,7 +187,7 @@ onload = function() {
 	});
 
 	webview.addEventListener('console-message', function(msg) {
-		if(msg.message == 'newmsg') {
+		if(msg.message === 'newmsg') {
 			ipcRenderer.send('newmsg', true);
 		}
 	});

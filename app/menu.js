@@ -1,114 +1,178 @@
-(function(scope) {
-    "use strict";
-
-    module.exports = [
-        {
-            label: ((process.platform === 'win32' || process.platform === 'win64') ? 'File': 'WhatsApp Desktop'),
-            submenu: [
-                {
-                    label: 'About WhatsApp',
-                    selector: 'orderFrontStandardAboutPanel:'
-                },
-                { type: 'separator' },
-                {
-                    label: 'Hide WhatsApp',
-                    accelerator: 'CmdOrCtrl+H',
-                    selector: 'hide:'
-                },
-                {
-                    label: 'Hide Others',
-                    accelerator: 'CmdOrCtrl+Shift+H',
-                    selector: 'hideOtherApplications:'
-                },
-                {
-                    label: 'Show All',
-                    selector: 'unhideAllApplications:'
-                },
-                { type: 'separator' },
-                {
-                    label: 'Quit',
-                    accelerator: 'CmdOrCtrl+Q',
-                    selector: 'terminate:'
-                }
-            ]
-        },
-        {
-            label: 'Edit',
-            submenu: [
-                {
-                    label: 'Undo',
-                    accelerator: 'CmdOrCtrl+Z',
-                    selector: 'undo:'
-                },
-                {
-                    label: 'Redo',
-                    accelerator: 'Shift+CmdOrCtrl+Z',
-                    selector: 'redo:'
-                },
-                { type: 'separator' },
-                {
-                    label: 'Cut',
-                    accelerator: 'CmdOrCtrl+X',
-                    selector: 'cut:'
-                },
-                {
-                    label: 'Copy',
-                    accelerator: 'CmdOrCtrl+C',
-                    selector: 'copy:'
-                },
-                {
-                    label: 'Paste',
-                    accelerator: 'CmdOrCtrl+V',
-                    selector: 'paste:'
-                },
-                {
-                    label: 'Select All',
-                    accelerator: 'CmdOrCtrl+A',
-                    selector: 'selectAll:'
-                }
-            ]
-        },
-        {
-            label: 'View',
-            submenu: [
-                {
-                    label: 'Reload',
-                    accelerator: 'CmdOrCtrl+R',
-                    click: function() { global.whatsApp.window.reload(); }
-                },
-                {
-                    label: 'Toggle DevTools',
-                    accelerator: 'Alt+CmdOrCtrl+I',
-                    click: function() { global.whatsApp.window.toggleDevTools(); }
-                }
-            ]
-        },
-        {
-            label: 'Window',
-            submenu: [
-                {
-                    label: 'Minimize',
-                    accelerator: 'CmdOrCtrl+M',
-                    selector: 'performMiniaturize:'
-                },
-                {
-                    label: 'Close',
-                    accelerator: 'CmdOrCtrl+W',
-                    selector: 'hide:'
-                },
-                { type: 'separator' },
-                {
-                    label: 'Bring All to Front',
-                    selector: 'arrangeInFront:'
-                },
-                {
-                  label: 'Settings',
-                  accelerator: 'CmdOrCtrl+,',
-                  click: function () {
-                    global.whatsApp.showSettings();
-                  }
-                }
-            ]
-        }
-    ];
+(function() {
+   "use strict";
+   
+   var template = [
+      {
+         label: 'Edit',
+         submenu: [
+            {
+               label: 'Undo',
+               accelerator: 'CmdOrCtrl+Z',
+               role: 'undo'
+            },
+            {
+               label: 'Redo',
+               accelerator: 'Shift+CmdOrCtrl+Z',
+               role: 'redo'
+            },
+            {
+               type: 'separator'
+            },
+            {
+               label: 'Cut',
+               accelerator: 'CmdOrCtrl+X',
+               role: 'cut'
+            },
+            {
+               label: 'Copy',
+               accelerator: 'CmdOrCtrl+C',
+               role: 'copy'
+            },
+            {
+               label: 'Paste',
+               accelerator: 'CmdOrCtrl+V',
+               role: 'paste'
+            },
+            {
+               label: 'Select All',
+               accelerator: 'CmdOrCtrl+A',
+               role: 'selectall'
+            },
+            {
+               type: 'separator'
+            },
+            {
+               label: 'Settings',
+               accelerator: 'CmdOrCtrl+,',
+               click() {
+                  global.whatsApp.showSettings();
+               }
+            }
+         ]
+      },
+      {
+         label: 'View',
+         submenu: [
+            {
+               label: 'Reload',
+               accelerator: 'CmdOrCtrl+R',
+               click(item, focusedWindow) {
+                  if (focusedWindow) focusedWindow.reload();
+               }
+            },
+            {
+               label: 'Toggle Full Screen',
+               accelerator: (() => {
+                  if (process.platform === 'darwin') 
+                  return 'Ctrl+Command+F';
+                  else 
+                  return 'F11';
+               })(),
+               click: function(item, focusedWindow) {
+                  if (focusedWindow) focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+               }
+            },
+            {
+               label: 'Toggle Developer Tools',
+               accelerator: (() => {
+                  if (process.platform === 'darwin')
+                  return 'Alt+Command+I';
+                  else
+                  return 'Ctrl+Shift+I';
+               })(),
+               click: function(item, focusedWindow) {
+                  if (focusedWindow) focusedWindow.toggleDevTools();
+               }
+            },
+         ]
+      },
+      {
+         label: 'Window',
+         role: 'window',
+         submenu: [
+            {
+               label: 'Minimize',
+               accelerator: 'CmdOrCtrl+M',
+               role: 'minimize'
+            },
+            {
+               label: 'Close',
+               accelerator: 'CmdOrCtrl+W',
+               role: 'close'
+            }
+         ]
+      },
+      {
+         label: 'Audio',
+         submenu: [
+            {
+               label: 'Increase Audio Rate by 20%',
+               accelerator: 'CmdOrCtrl+=',
+               click(item, focusedWindow) {
+                  if( focusedWindow && focusedWindow.webContents) 
+                  focusedWindow.webContents.executeJavaScript( "window.audioRate = (window.audioRate || 1) + 0.2");
+               }
+            },
+            {
+               label: 'Decrease Audio Rate by 20%',
+               accelerator: 'CmdOrCtrl+-',
+               click: function(item, focusedWindow) {
+                  if( focusedWindow && focusedWindow.webContents) 
+                  focusedWindow.webContents.executeJavaScript( "window.audioRate = (window.audioRate || 1) - 0.2");
+               }
+            }
+         ]
+      }
+   ];
+   
+   if (process.platform === 'darwin') {
+      var name = 'WhatsApp Desktop';
+      template.unshift({
+         label: name,
+         submenu: [
+            {
+               label: 'About ' + name,
+               role: 'about'
+            },
+            {
+               type: 'separator'
+            },
+            {
+               label: 'Hide ' + name,
+               accelerator: 'Command+H',
+               role: 'hide'
+            },
+            {
+               label: 'Hide Others',
+               accelerator: 'Command+Alt+H',
+               role: 'hideothers'
+            },
+            {
+               label: 'Show All',
+               role: 'unhide'
+            },
+            {
+               type: 'separator'
+            },
+            {
+               label: 'Quit',
+               accelerator: 'Command+Q',
+               click: () => { require('app').quit(); }
+            },
+         ]
+      });
+      // Window menu.
+      template[3].submenu.push(
+         {
+            type: 'separator'
+         },
+         {
+            label: 'Bring All to Front',
+            role: 'front'
+         }
+      );
+   }
+   
+   module.exports = template;
+   
 })(this);

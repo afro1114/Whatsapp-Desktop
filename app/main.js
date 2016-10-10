@@ -1,211 +1,225 @@
-(function(scope) {
-    "use strict";
-
-    var app = require('electron').app;
-    var AppMenu = require('menu');
-    var MenuItem = require('menu-item');
-    var AppTray = require('tray');
-    var fileSystem = require('fs');
-    var NativeImage = require('native-image');
-    var BrowserWindow = require('browser-window');
-    var ipcMain = require('electron').ipcMain;
-
-    global.onlyOSX = function(callback) {
-        if (process.platform === 'darwin') {
-            return Function.bind.apply(callback, this, [].slice.call(arguments, 0));
-        }
-        return function() {};
-    };
-
-    global.onlyWin = function(callback) {
-        if (process.platform === 'win32' || process.platform === 'win64') {
-            return Function.bind.apply(callback, this, [].slice.call(arguments, 0));
-        }
-        return function() {};
-    };
-
-    global.config = {
+(function() {
+   "use strict";
+   
+	const {Menu, BrowserWindow, Tray} = require('electron');
+   var app = require('electron').app;
+   // var AppMenu = require('electron').menu;
+   // var AppTray = require('electron').tray;
+   var fileSystem = require('fs');
+   var NativeImage = require('electron').nativeImage;
+   // var BrowserWindow = require('electron').browserWindow;
+   var ipcMain = require('electron').ipcMain;
+   
+   // var join = require('path').join;
+   
+   global.onlyOSX = function(callback) {
+      if (process.platform === 'darwin') {
+         return Function.bind.apply(callback, this, [].slice.call(arguments, 0));
+      }
+      return function() {};
+   };
+   
+   global.onlyLinux = function(callback) {
+      if (process.platform === 'linux') {
+         return Function.bind.apply(callback, this, [].slice.call(arguments, 0));
+      }
+      return function() {};
+   };
+   
+   global.onlyWin = function(callback) {
+      if (process.platform === 'win32' || process.platform === 'win64') {
+         return Function.bind.apply(callback, this, [].slice.call(arguments, 0));
+      }
+      return function() {};
+   };
+   
+   global.config = {
       defaultSettings: {
-        width: 1000,
-        height: 720,
-        thumbSize: 0
+         width: 1000,
+         height: 720,
+         thumbSize: 0
       },
       currentSettings: {},
-      init: function () {
-        config.loadConfiguration();
+      init () {
+         config.loadConfiguration();
       },
-      loadConfiguration: function () {
-        var settingsFile = app.getPath('userData') +"/settings.json";
-        try {
-          var data = fileSystem.readFileSync(settingsFile);
-          config.currentSettings = JSON.parse(data);
-        } catch (e) {
-          config.currentSettings = config.defaultSettings;
-        }
+      loadConfiguration () {
+         var settingsFile = app.getPath('userData') +"/settings.json";
+         try {
+            var data = fileSystem.readFileSync(settingsFile);
+            config.currentSettings = JSON.parse(data);
+         } catch (e) {
+            config.currentSettings = config.defaultSettings;
+         }
       },
-      applyConfiguration: function () {
-        whatsApp.window.webContents.on('dom-ready', function (event, two) {
-        });
-
-        if(config.get("useProxy")) {
-          var session = whatsApp.window.webContents.session;
-          var httpProxy = config.get("httpProxy");
-          var httpsProxy = config.get("httpsProxy") || httpProxy;
-          if(httpProxy) {
-            session.setProxy("http="+ httpProxy +";https=" + httpsProxy, function(){});
-          }
-        }
+      applyConfiguration () {
+         
+         if(config.get("useProxy")) {
+            var session = whatsApp.window.webContents.session;
+            var httpProxy = config.get("httpProxy");
+            var httpsProxy = config.get("httpsProxy") || httpProxy;
+            if(httpProxy) {
+               session.setProxy("http="+ httpProxy +";https=" + httpsProxy, () => {});
+            }
+         }
       },
-      saveConfiguration: function () {
-        fileSystem.writeFileSync(app.getPath('userData') + "/settings.json", JSON.stringify(config.currentSettings) , 'utf-8');
+      saveConfiguration () {
+         fileSystem.writeFileSync(app.getPath('userData') + "/settings.json", JSON.stringify(config.currentSettings) , 'utf-8');
       },
-      get: function (key) {
-        return config.currentSettings[key];
+      get (key) {
+         return config.currentSettings[key];
       },
-      set: function (key, value) {
-        config.currentSettings[key] = value;
+      set(key, value) {
+         config.currentSettings[key] = value;
       },
-      unSet: function (key) {
-        if(config.currentSettings.hasOwnProperty(key)) {
-          delete config.currentSettings[key];
-        }
+      unSet (key) {
+         if(config.currentSettings.hasOwnProperty(key)) {
+            delete config.currentSettings[key];
+         }
       }
-    };
-
-    global.whatsApp = {
-        init: function() {
-            whatsApp.createMenu();
-
-            onlyOSX(function () {
-              whatsApp.createTray();
-            });
-
-            whatsApp.clearCache();
-            config.init();
-            whatsApp.openWindow();
-            config.applyConfiguration();
-        },
-        createMenu: function() {
-            whatsApp.menu =
-                AppMenu.buildFromTemplate(require('./menu'));
-                AppMenu.setApplicationMenu(whatsApp.menu);
-        },
-        createTray: function() {
-            whatsApp.tray = new AppTray(__dirname + '/assets/img/trayTemplate.png');
-
-            whatsApp.tray.on('clicked', function() {
-                whatsApp.window.show();
-            });
-
-            whatsApp.tray.setToolTip('WhatsApp Desktop');
-        },
-        clearCache: function() {
-            try{
-                fileSystem.unlinkSync(app.getPath('appData') + '/Application Cache/Index');
-            }catch(e){}
-        },
-        openWindow: function (){
-          whatsApp.window = new BrowserWindow({
+   };
+   
+   global.whatsApp = {
+      init() {
+         whatsApp.createMenu();
+         
+         onlyOSX(() => {
+            whatsApp.createTray();
+         });
+         
+         whatsApp.clearCache();
+         config.init();
+         whatsApp.openWindow();
+         config.applyConfiguration();
+      },
+      createMenu() {
+         whatsApp.menu = Menu.buildFromTemplate(require('./menu'));
+         Menu.setApplicationMenu(whatsApp.menu);
+      },
+      createTray() {
+         whatsApp.tray = new Tray(__dirname + '/assets/img/trayTemplate.png');
+         
+         whatsApp.tray.on('clicked', () => {
+            whatsApp.window.show();
+         });
+         
+         whatsApp.tray.setToolTip('WhatsApp Desktop');
+      },
+      clearCache() {
+         try{
+            fileSystem.unlinkSync(app.getPath('appData') + '/Application Cache/Index');
+         }catch(e){}
+      },
+      openWindow (){
+         whatsApp.window = new BrowserWindow({
             "y": config.get("posY"),
             "x": config.get("posX"),
             "width": config.get("width"),
             "height": config.get("height"),
             "minWidth": 670,
-            "min-height": 650,
-            "type": "toolbar",
+            "minHeight": 650,
             "node-integration": true,
             "title": "WhatsApp",
             "plugins": true,
-            "webaudio": true
-          });
-
-          whatsApp.window.loadURL("file://" + __dirname + "/html/main.html");
-
-          if(config.get("useProxy")) {
+            "webaudio": true,
+				"icon": __dirname + 'assets/icon/icon.png'
+            // "webPreferences": {
+            //       "nodeIntegration": true,
+            //       "preload": join(__dirname, 'js', 'injected.js')
+            //     }
+         });
+         
+         whatsApp.window.loadURL("file://" + __dirname + "/html/main.html");
+         
+         if(config.get("useProxy")) {
             var session = whatsApp.window.webContents.session;
             var httpProxy = config.get("httpProxy");
             var httpsProxy = config.get("httpsProxy") || httpProxy;
             if(httpProxy) {
-              session.setProxy("http="+ httpProxy +";https=" + httpsProxy, function(){});
+               session.setProxy("http="+ httpProxy +";https=" + httpsProxy, () => {});
             }
-          }
-
-          whatsApp.window.show();
-
-          // bounce for osx
-          ipcMain.on('newmsg', function(event, value) {
-            onlyOSX(function() {
-              app.dock.bounce('informational');
+         }
+         
+         whatsApp.window.show();
+         
+         // bounce for osx
+         ipcMain.on('newmsg', () => {
+            onlyOSX(() => {
+               app.dock.bounce('informational');
             });
-          });
-
-          // update badge
-          ipcMain.on('uptbadge', function(event, value) {
+         });
+         
+         // update badge
+         ipcMain.on('uptbadge', (event, value) => {
             var count = value.title.match(/\((\d+)\)/);
             count = count ? count[1] : '';
-
-            onlyOSX(function() {
-              app.dock.setBadge(count);
+            
+            onlyOSX(() => {
+               app.dock.setBadge(count);
             })();
-
-            onlyWin(function() {
-                if (parseInt(count) > 0) {
-                    if (!whatsApp.window.isFocused()) {
-                        whatsApp.window.flashFrame(true);
-                    }
-
-                    var badge = NativeImage.createFromPath(app.getAppPath() + "/assets/badges/badge-" + (count > 9 ? 0 : count) + ".png");
-                    whatsApp.window.setOverlayIcon(badge, "new messages");
-                } else {
-                    whatsApp.window.setOverlayIcon(null, "no new messages");
-                }
+            
+            onlyLinux((() => {
+                //Update on linux
+            }));
+            
+            onlyWin(() => {
+               if (parseInt(count) > 0) {
+                  if (!whatsApp.window.isFocused()) {
+                     whatsApp.window.flashFrame(true);
+                  }
+                  
+                  var badge = NativeImage.createFromPath(app.getAppPath() + "/assets/badges/badge-" + (count > 9 ? 0 : count) + ".png");
+                  whatsApp.window.setOverlayIcon(badge, "new messages");
+               } else {
+                  whatsApp.window.setOverlayIcon(null, "no new messages");
+               }
             })();
-          });
-
-					ipcMain.on("settings.show", function (event, value) {
-						var jsString;
-						if(value) {
-							jsString = 'document.getElementById("settings-container").style.display = "block";';
-						} else {
-							jsString = 'document.getElementById("settings-container").style.display = "none";';
-						}
-							whatsApp.window.webContents.executeJavaScript(jsString);
-					});
-
-            whatsApp.window.on('close', onlyOSX(function(e) {
-                if (whatsApp.window.forceClose !== true) {
-                    e.preventDefault();
-                    whatsApp.window.hide();
-                }
-            }));
-
-            whatsApp.window.on("close", function () {
-              //save the window position
-              config.set("posX", this.getBounds().x);
-              config.set("posY", this.getBounds().y);
-              config.set("width", this.getBounds().width);
-              config.set("height", this.getBounds().height);
-              config.saveConfiguration();
-            });
-
-            app.on('before-quit', onlyOSX(function() {
-                whatsApp.window.forceClose = true;
-            }));
-
-            app.on('activate-with-no-open-windows', onlyOSX(function() {
-                whatsApp.window.show();
-            }));
-
-            app.on('window-all-closed', onlyWin(function() {
-                app.quit();
-            }));
-        },
-				showSettings: function () {
-					var jsString = 'document.getElementById("settings-container").style.display = "block";';
-					whatsApp.window.webContents.executeJavaScript(jsString);
-				}
-    };
-    app.on('ready', function() {
-        whatsApp.init();
-    });
+         });
+         
+         ipcMain.on("settings.show", (event, value) => {
+            var jsString;
+            if(value) {
+               jsString = 'document.getElementById("settings-container").style.display = "block";';
+            } else {
+               jsString = 'document.getElementById("settings-container").style.display = "none";';
+            }
+            whatsApp.window.webContents.executeJavaScript(jsString);
+         });
+         
+         whatsApp.window.on('close', onlyOSX((e) => {
+            if (whatsApp.window.forceClose !== true) {
+               e.preventDefault();
+               whatsApp.window.hide();
+            }
+         }));
+         
+         whatsApp.window.on("close", () => {
+            //save the window position
+            config.set("posX", whatsApp.window.getBounds().x);
+            config.set("posY", whatsApp.window.getBounds().y);
+            config.set("width", whatsApp.window.getBounds().width);
+            config.set("height", whatsApp.window.getBounds().height);
+            config.saveConfiguration();
+         });
+         
+         app.on('before-quit', onlyOSX(() =>{
+            whatsApp.window.forceClose = true;
+         }));
+         
+         app.on('activate-with-no-open-windows', onlyOSX(() =>{
+            whatsApp.window.show();
+         }));
+         
+         app.on('window-all-closed', onlyWin(() => {
+            app.quit();
+         }));
+      },
+      showSettings () {
+         var jsString = 'document.getElementById("settings-container").style.display = "block";';
+         whatsApp.window.webContents.executeJavaScript(jsString);
+      }
+   };
+   app.on('ready', () =>{
+      whatsApp.init();
+   });
 })(this);

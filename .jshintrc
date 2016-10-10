@@ -1,0 +1,21 @@
+{
+	"bitwise": true,
+	"browser": true,
+	"curly": false,
+	"devel": true,
+	"eqeqeq": true,
+	"esnext": true,
+	"latedef": true,
+	"noarg": true,
+	"node": true,
+	"undef": true,
+	"unused": true,
+	"jquery": true,
+	"globals":{
+		"whatsApp": true,
+		"config": true,
+		"onlyOSX": true,
+		"onlyLinux": true,
+		"onlyWin": true
+	}
+}
