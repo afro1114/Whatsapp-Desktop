@@ -3,14 +3,9 @@
    
 	const {Menu, BrowserWindow, Tray} = require('electron');
    var app = require('electron').app;
-   // var AppMenu = require('electron').menu;
-   // var AppTray = require('electron').tray;
    var fileSystem = require('fs');
    var NativeImage = require('electron').nativeImage;
-   // var BrowserWindow = require('electron').browserWindow;
    var ipcMain = require('electron').ipcMain;
-   
-   // var join = require('path').join;
    
    global.onlyOSX = function(callback) {
       if (process.platform === 'darwin') {
@@ -123,10 +118,6 @@
             "plugins": true,
             "webaudio": true,
 				"icon": __dirname + 'assets/icon/icon.png'
-            // "webPreferences": {
-            //       "nodeIntegration": true,
-            //       "preload": join(__dirname, 'js', 'injected.js')
-            //     }
          });
          
          whatsApp.window.loadURL("file://" + __dirname + "/html/main.html");
