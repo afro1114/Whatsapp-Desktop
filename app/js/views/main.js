@@ -4,7 +4,6 @@ var config = require('electron').remote.getGlobal('config');
 onload = function() {
 	var webview = document.getElementById("whatsapp-view");
 	webview.addEventListener("dom-ready", function() {
-		webview.openDevTools();
 		
 		if(config.get('hideAvatars')) {
 			this.insertCSS('#side .chat-title {margin-left: 10px}');

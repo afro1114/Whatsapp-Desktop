@@ -90,7 +90,6 @@
          whatsApp.clearCache();
          config.init();
          whatsApp.openWindow();
-         whatsApp.webContents.openDevTools();
          config.applyConfiguration();
       },
       createMenu() {
