@@ -110,7 +110,7 @@
             "x": config.get("posX"),
             "width": config.get("width"),
             "height": config.get("height"),
-            "min-width": 670,
+            "minWidth": 670,
             "min-height": 650,
             "type": "toolbar",
             "node-integration": true,
